@@ -40,7 +40,7 @@ function RegistrationForm({ event, onClose }) {
     setIsSubmitting(true);
     
     try {
-      const res = await axios.post("http://localhost:5000/api/registration/register", {
+      const res = await axios.post("https://tech-event-website.onrender.com/api/registration/register", {
         eventId: event._id,
         ...formData,
         teamSize: event.teamSize
