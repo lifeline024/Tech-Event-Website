@@ -199,7 +199,7 @@ function Admin() {
   const fetchEvents = () => {
     setLoading(true);
     axios
-      .get("http://localhost:5000/api/events")
+      .get("https://tech-event-website.onrender.com/api/events")
       .then(res => setEvents(res.data))
       .catch(err => console.error("Error fetching events:", err))
       .finally(() => setLoading(false));
@@ -213,7 +213,7 @@ function Admin() {
     setLoading(true);
     setSelectedEvent(eventId);
     axios
-      .get(`http://localhost:5000/api/registration/event/${eventId}`)
+      .get(`https://tech-event-website.onrender.com/api/registration/event/${eventId}`)
       .then(res => setParticipants(res.data))
       .catch(err => {
         console.error("Error fetching participants:", err);
