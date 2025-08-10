@@ -282,7 +282,7 @@ function Home() {
   userSelect: "none",
   letterSpacing: "1.2px"
 }}>
-  Design and Developed By ❤️ _undefinederror
+  Design and Developed By ❤️ Aayushya Shrivastava
 </p>
 
 <style>
