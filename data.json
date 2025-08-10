@@ -1,0 +1,132 @@
+[
+  {
+    "name": "Hackathon",
+    "teamSize": "4-5 Members (1 Girl)",
+    "entryFee": 250,
+    "dateTime": "2025-09-15 10:00 AM",
+    "instructions": "Bring your own laptop and charger.",
+    "prizeMoney": "₹10,00",
+    "venue": "Auditorium Hall",
+    "image": "image.png"
+  },
+  {
+    "name": "Coding Challenge",
+    "teamSize": "1-2 Members",
+    "entryFee": 160,
+    "dateTime": "2025-08-15 2:00 PM",
+    "instructions": "Languages allowed: C, C++, Java, Python.",
+    "prizeMoney": "₹5,000",
+    "venue": "Lab 101",
+    "image": "https://example.com/coding.jpg"
+  },
+  {
+    "name": "BGMI Tournament",
+    "teamSize": "4 Members",
+    "entryFee": 160,
+    "dateTime": "2025-08-16 11:00 AM",
+    "instructions": "Bring your own mobile devices.",
+    "prizeMoney": "₹3,000",
+    "venue": "Sports Arena",
+    "image": "https://example.com/bgmi.jpg"
+  },
+  {
+    "name": "FREE FIRE Tournament",
+    "teamSize": "4 Members",
+    "entryFee": 160,
+    "dateTime": "2025-08-16 11:00 AM",
+    "instructions": "Bring your own mobile devices.",
+    "prizeMoney": "₹3,000",
+    "venue": "Sports Arena",
+    "image": "https://example.com/bgmi.jpg"
+  },
+  {
+    "name": "Weight Lifting",
+    "teamSize": "Single",
+    "entryFee": 150,
+    "dateTime": "2025-08-16 3:00 PM",
+    "instructions": "Proper sports gear required.",
+    "prizeMoney": "₹2,000",
+    "venue": "Gym Hall",
+    "image": "https://example.com/weightlifting.jpg"
+  },
+  {
+    "name": "Dance Competition",
+    "teamSize": "Solo or Group",
+    "entryFee": 250,
+    "dateTime": "2025-08-17 6:00 PM",
+    "instructions": "Time limit: 5 minutes.",
+    "prizeMoney": "₹4,000",
+    "venue": "Main Stage",
+    "image": "https://example.com/dance.jpg"
+  },
+  {
+    "name": "Singing Competition",
+    "teamSize": "Solo",
+    "entryFee": 200,
+    "dateTime": "2025-08-17 4:00 PM",
+    "instructions": "Bring your karaoke track.",
+    "prizeMoney": "₹3,000",
+    "venue": "Music Hall",
+    "image": "https://example.com/singing.jpg"
+  },
+  {
+    "name": "Chess",
+    "teamSize": "Single",
+    "entryFee": 100,
+    "dateTime": "2025-08-18 9:00 AM",
+    "instructions": "Standard chess rules apply.",
+    "prizeMoney": "₹1,500",
+    "venue": "Room 202",
+    "image": "https://example.com/chess.jpg"
+  },
+  {
+    "name": "Treasure Hunt",
+    "teamSize": "3-5 Members",
+    "entryFee": 300,
+    "dateTime": "2025-08-18 2:00 PM",
+    "instructions": "Follow clues to find treasure.",
+    "prizeMoney": "₹2,500",
+    "venue": "Campus Ground",
+    "image": "https://example.com/treasure.jpg"
+  },
+  {
+    "name": "Video & Photography",
+    "teamSize": "1-2 Members",
+    "entryFee": 150,
+    "dateTime": "2025-08-19 11:00 AM",
+    "instructions": "Submit work before deadline.",
+    "prizeMoney": "₹2,000",
+    "venue": "Media Lab",
+    "image": "https://example.com/photography.jpg"
+  },
+  {
+    "name": "Modeling",
+    "teamSize": "Single",
+    "entryFee": 300,
+    "dateTime": "2025-08-19 6:00 PM",
+    "instructions": "Groups must be single-gender.",
+    "prizeMoney": "₹5,000",
+    "venue": "Main Stage",
+    "image": "https://example.com/modeling.jpg"
+  },
+  {
+    "name": "Project Expo",
+    "teamSize": "2-4 Members",
+    "entryFee": 400,
+    "dateTime": "2025-08-20 10:00 AM",
+    "instructions": "Bring your working model.",
+    "prizeMoney": "₹6,000",
+    "venue": "Expo Hall",
+    "image": "https://example.com/expo.jpg"
+  },
+  {
+    "name": "Poster Designing",
+    "teamSize": "1-2 Members",
+    "entryFee": 100,
+    "dateTime": "2025-08-20 1:00 PM",
+    "instructions": "Theme will be given on the spot.",
+    "prizeMoney": "₹1,000",
+    "venue": "Art Room",
+    "image": "https://example.com/poster.jpg"
+  }
+]

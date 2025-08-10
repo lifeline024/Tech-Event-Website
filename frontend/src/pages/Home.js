@@ -1,252 +1,303 @@
-import React from 'react';
-import { FaCheck, FaBook, FaUserTie } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import { Link } from "react-router-dom";
+
+// Background image from Unsplash (college fest theme)
+const backgroundImage = "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80";
+
+// Animations
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+`;
+
+const gradientBG = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+const HeroSection = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e3c72, #2a5298, #6a11cb);
+  background-size: 300% 300%;
+  animation: ${gradientBG} 12s ease infinite;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url(${backgroundImage}) center/cover;
+    opacity: 0.15;
+    z-index: 0;
+  }
+`;
+
+const ContentWrapper = styled.div`
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+`;
+
+const Title = styled.h1`
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: fadeInDown 1s ease both;
+  
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+`;
+
+const Subtitle = styled.p`
+  font-size: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 1.5s ease both;
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+`;
+
+const EventList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin: 2rem 0;
+  animation: fadeInUp 1.2s ease both;
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+const EventCard = styled.div`
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 1.2rem 2rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  &:hover {
+    transform: translateY(-5px) scale(1.05);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+  }
+`;
+
+const CTAButton = styled(Link)`
+  margin-top: 2rem;
+  padding: 1rem 2.5rem;
+  background-color: #ffb703;
+  color: #1a1a2e;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 183, 3, 0.4);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  animation: ${float} 3s ease-in-out infinite;
+  animation-delay: 1s;
+  border-radius: 50px;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ffb703, #ffd166);
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 183, 3, 0.6);
+    
+    &::before {
+      opacity: 0.8;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+  }
+`;
+
+const FloatingElements = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 0;
+`;
+
+const FloatingElement = styled.div`
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  filter: blur(30px);
+  animation: ${float} 6s ease-in-out infinite;
+  
+  &:nth-child(1) {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    left: 20%;
+    animation-delay: 0s;
+  }
+  
+  &:nth-child(2) {
+    width: 300px;
+    height: 300px;
+    bottom: 15%;
+    right: 10%;
+    animation-delay: 2s;
+  }
+  
+  &:nth-child(3) {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    left: 5%;
+    animation-delay: 4s;
+  }
+`;
 
 function Home() {
-  const isLoggedIn = localStorage.getItem("authtoken");
-  const navigate = useNavigate();
+  const events = [
+  "Hackathon",
+  "Project Expo",
+  "Coding Challenge",
+  "BGMI Tournament",
+  "FREE FIRE Tournament",
+  "Dance Competition",
+  "Singing Contest",
+  "Modeling Competition",
+  "Video & Photography Contest",
+  "Poster Presentation",
+  "Treasure Hunt",
+  "Weight Lifting Competition"
+];
 
-  // common style to disable pointer events when not logged in
-  const disabledStyle = {
-    pointerEvents: 'none',
-    opacity: 0.5,
-    cursor: 'not-allowed',
-  };
-
-  // click handler for buttons or links to redirect to login if not logged in
-  const handleClick = (e, targetPath) => {
-    if (!isLoggedIn) {
-      e.preventDefault();
-      alert("Please login first to access this feature.");
-      navigate("/login");
-    }
-  };
-
-  // Rest of your styles as-is ...
 
   return (
-    <div style={{ backgroundColor: '#f8f9fa' }}>
-      {/* Hero Section */}
-      <section style={{ backgroundColor: '#ffffff', padding: '80px 0', textAlign: 'center' }}>
-        <div style={{ maxWidth: '1140px', margin: '0 auto', padding: '0 15px' }}>
-          <span style={{
-            backgroundColor: 'rgba(13, 110, 253, 0.1)',
-            color: '#0d6efd',
-            padding: '8px 16px',
-            borderRadius: '50px',
-            fontSize: '0.875rem',
-            fontWeight: '600',
-            marginBottom: '24px',
-            display: 'inline-block'
-          }}>
-            Transforming Lives Through Education
-          </span>
-          
-          <h1 style={{ fontSize: '3.5rem', fontWeight: '700', marginBottom: '24px', lineHeight: '1.2' }}>
-            Welcome to <span style={{ color: '#0d6efd' }}>Zenith</span>
-          </h1>
-          
-          <p style={{
-            color: '#6c757d',
-            fontSize: '1.25rem',
-            maxWidth: '600px',
-            margin: '0 auto 48px',
-            lineHeight: '1.5'
-          }}>
-            Your path to academic excellence and personal growth starts here. 
-            We empower students to reach their highest potential.
-          </p>
-          
-          <div style={{ display: 'flex', flexDirection: 'row', gap: '16px', justifyContent: 'center' }}>
-            <button
-              style={isLoggedIn ? {
-                backgroundColor: '#0d6efd',
-                color: 'white',
-                padding: '12px 24px',
-                borderRadius: '6px',
-                border: 'none',
-                fontSize: '1.125rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s ease'
-              } : { ...disabledStyle, padding: '12px 24px', borderRadius: '6px', fontSize: '1.125rem', fontWeight: '500' }}
-              onClick={(e) => {
-                if (!isLoggedIn) {
-                  e.preventDefault();
-                  alert("Please login first.");
-                  navigate("/login");
-                }
-              }}
-              onMouseEnter={(e) => isLoggedIn && (e.target.style.backgroundColor = '#0b5ed7')}
-              onMouseLeave={(e) => isLoggedIn && (e.target.style.backgroundColor = '#0d6efd')}
-              disabled={!isLoggedIn}
-            >
-              Explore Programs
-            </button>
-            
-            <button
-              style={isLoggedIn ? {
-                backgroundColor: 'transparent',
-                color: '#0d6efd',
-                padding: '12px 24px',
-                borderRadius: '6px',
-                border: '1px solid #0d6efd',
-                fontSize: '1.125rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              } : { ...disabledStyle, padding: '12px 24px', borderRadius: '6px', fontSize: '1.125rem', fontWeight: '500', border: '1px solid #0d6efd' }}
-              onClick={(e) => {
-                if (!isLoggedIn) {
-                  e.preventDefault();
-                  alert("Please login first.");
-                  navigate("/login");
-                  
-                } else {
-                  navigate("/consultation");
-                }
-              }}
-              onMouseEnter={(e) => {
-                if (isLoggedIn) {
-                  e.target.style.backgroundColor = '#0d6efd';
-                  e.target.style.color = 'white';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (isLoggedIn) {
-                  e.target.style.backgroundColor = 'transparent';
-                  e.target.style.color = '#0d6efd';
-                }
-              }}
-              disabled={!isLoggedIn}
-      >
-              Free Consultation
-            </button>
-          </div>
-        </div>
-      </section>
+    <HeroSection>
+      <FloatingElements>
+        <FloatingElement />
+        <FloatingElement />
+        <FloatingElement />
+      </FloatingElements>
+      
+      <ContentWrapper>
+        <Title>𝓒𝓸𝓶𝓹𝓾𝓽𝓮𝓻 𝓢𝓬𝓲𝓮𝓷𝓬𝓮 𝓣𝓮𝓬𝓱 𝓕𝓮𝓼𝓽 (2025)</Title>
+        <Subtitle>
+          Experience the ultimate college festival with 15+ electrifying events! 
+          Showcase your talents, compete with the best, and create memories 
+          that last a lifetime. From tech to arts, we've got it all!
+        </Subtitle>
+        
+        <EventList>
+          {events.map((event, index) => (
+            <EventCard key={index}>{event}</EventCard>
+          ))}
+        </EventList>
+        
+        <CTAButton to="/events">Register Now</CTAButton>
+      </ContentWrapper><br></br>
+<p style={{
+  fontWeight: "900",
+  fontSize: "18px",
+  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  background: "linear-gradient(45deg, #ff6ec4, #7873f5, #4ade80)",
+  WebkitBackgroundClip: "text",
+  WebkitTextFillColor: "transparent",
+  animation: "glow 2s ease-in-out infinite alternate",
+  textAlign: "center",
+  padding: "10px",
+  userSelect: "none",
+  letterSpacing: "1.2px"
+}}>
+  Design and Developed By ❤️ _undefinederror
+</p>
 
-      {/* Features Section */}
-      <section style={{
-        backgroundColor: '#f8f9fa',
-        padding: '80px 0'
-      }}>
-        <div style={{ maxWidth: '1140px', margin: '0 auto', padding: '0 15px' }}>
-          <h2 style={{
-            textAlign: 'center',
-            fontSize: '2.5rem',
-            fontWeight: '700',
-            marginBottom: '48px',
-            color: '#212529'
-          }}>
-            Why Choose Zenith?
-          </h2>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-            {[{
-              icon: <FaCheck style={{ color: '#0d6efd', fontSize: '30px' }} />,
-              title: 'Proven Results',
-              text: 'Our students consistently achieve top scores and university placements.'
-            }, {
-              icon: <FaUserTie style={{ color: '#0d6efd', fontSize: '30px' }} />,
-              title: 'Expert Faculty',
-              text: 'Learn from IIT/NIT alumni with 10+ years of teaching experience.'
-            }, {
-              icon: <FaBook style={{ color: '#0d6efd', fontSize: '30px' }} />,
-              title: 'Personalized Approach',
-              text: 'Customized learning plans tailored to each student\'s needs.'
-            }].map(({ icon, title, text }, idx) => (
-              <div
-                key={idx}
-                style={{
-                  backgroundColor: '#ffffff',
-                  borderRadius: '12px',
-                  border: 'none',
-                  height: '100%',
-                  boxShadow: '0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  cursor: isLoggedIn ? 'default' : 'not-allowed',
-                  pointerEvents: isLoggedIn ? 'auto' : 'none',
-                  opacity: isLoggedIn ? 1 : 0.5,
-                }}
-                onMouseEnter={(e) => isLoggedIn && Object.assign(e.currentTarget.style, { transform: 'translateY(-5px)', boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15)' })}
-                onMouseLeave={(e) => isLoggedIn && Object.assign(e.currentTarget.style, { transform: 'none', boxShadow: '0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)' })}
-              >
-                <div style={{ padding: '32px', textAlign: 'center' }}>
-                  <div style={{
-                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
-                    borderRadius: '50%',
-                    display: 'inline-flex',
-                    padding: '20px',
-                    marginBottom: '24px'
-                  }}>
-                    {icon}
-                  </div>
-                  <h3 style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '500',
-                    marginBottom: '16px',
-                    color: '#212529'
-                  }}>{title}</h3>
-                  <p style={{ color: '#6c757d', marginBottom: '0' }}>{text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section style={{
-        backgroundColor: '#0d6efd',
-        color: 'white',
-        padding: '80px 0',
-        textAlign: 'center'
-      }}>
-        <div style={{ maxWidth: '1140px', margin: '0 auto', padding: '0 15px' }}>
-          <h2 style={{ fontSize: '3rem', fontWeight: '700', marginBottom: '24px' }}>Ready to Reach Your Zenith?</h2>
-          <p style={{
-            opacity: '0.75',
-            fontSize: '1.25rem',
-            maxWidth: '600px',
-            margin: '0 auto 48px',
-            lineHeight: '1.5'
-          }}>
-            Join hundreds of successful students who transformed their academic journey with us.
-          </p>
-          <Link
-            to={isLoggedIn ? "/courses" : "/login"}
-            onClick={(e) => {
-              if (!isLoggedIn) {
-                e.preventDefault();
-                alert("Please login first.");
-              }
-            }}
-            style={{ textDecoration: 'none', pointerEvents: isLoggedIn ? 'auto' : 'none', opacity: isLoggedIn ? 1 : 0.5, cursor: isLoggedIn ? 'pointer' : 'not-allowed' }}
-          >
-            <button
-              style={{
-                backgroundColor: '#ffffff',
-                color: '#212529',
-                padding: '12px 24px',
-                borderRadius: '6px',
-                border: 'none',
-                fontSize: '1.125rem',
-                fontWeight: '500',
-                cursor: isLoggedIn ? 'pointer' : 'not-allowed',
-                transition: 'background-color 0.3s ease',
-                opacity: isLoggedIn ? 1 : 0.5
-              }}
-              onMouseEnter={(e) => isLoggedIn && (e.target.style.backgroundColor = '#f8f9fa')}
-              onMouseLeave={(e) => isLoggedIn && (e.target.style.backgroundColor = '#ffffff')}
-              disabled={!isLoggedIn}
-            >
-              Enroll Now
-            </button>
-          </Link>
-        </div>
-      </section>
-    </div>
+<style>
+{`
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 10px #c76407ff, 0 0 20px #0bc524ff, 0 0 30px #ecebefff;
+    }
+    to {
+      text-shadow: 0 0 20px #d6d6dfff, 0 0 30px #d6d6dfff, 0 0 40px #d6d6dfff;
+    }
+  }
+`}
+</style>
+    </HeroSection>
   );
 }
 

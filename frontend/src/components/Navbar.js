@@ -1,257 +1,195 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import AuthModal from './AuthModal';
-import { 
-  AppBar, Toolbar, Typography, Button, 
-  IconButton, Menu, MenuItem, Box, 
-  Avatar, Divider, Badge
-} from '@mui/material';
-import { 
-  Menu as MenuIcon,
-  AccountCircle,
-  ExitToApp,
-  Home,
-  School,
-  AdminPanelSettings,
-  ContactMail,
-  Notifications
-} from '@mui/icons-material';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
+import { FaHome, FaCalendarAlt, FaUserShield, FaBars, FaTimes } from "react-icons/fa";
+
+// Animations
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const pulse = keyframes`
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+`;
+
+// Styled Components
+const NavContainer = styled.nav`
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  animation: ${fadeIn} 0.5s ease-out;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+`;
+
+const NavContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Logo = styled(Link)`
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    animation: ${pulse} 1s ease infinite;
+    color: #ffb703;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+`;
+
+const NavLinks = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+`;
+
+const NavLink = styled(Link)`
+  color: ${({ $isActive }) => ($isActive ? "#ffb703" : "rgba(255, 255, 255, 0.9)")};
+  text-decoration: none;
+  font-weight: ${({ $isActive }) => ($isActive ? "600" : "500")};
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: ${({ $isActive }) => ($isActive ? "80%" : "0")};
+    height: 2px;
+    background: #ffb703;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+  }
+
+  &:hover {
+    color: #ffb703;
+    transform: translateY(-2px);
+
+    &::after {
+      width: 80%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+    padding: 0.8rem;
+  }
+`;
+
+const MobileMenuButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #ffb703;
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
 
 function Navbar() {
-  const [authToken, setAuthToken] = useState(localStorage.getItem("authtoken"));
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const navigate = useNavigate();
   const location = useLocation();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Sync auth state with localStorage changes
+  // Close menu when route changes
   useEffect(() => {
-    const handleStorageChange = () => {
-      setAuthToken(localStorage.getItem("authtoken"));
+    setIsMenuOpen(false);
+  }, [location.pathname]);
+
+  // Close menu when clicking outside (for mobile)
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMenuOpen && !event.target.closest('nav')) {
+        setIsMenuOpen(false);
+      }
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("authtoken");
-    setAuthToken(null);
-    handleMenuClose();
-    navigate("/");
-  };
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setMobileMoreAnchorEl(null);
-  };
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const menuId = 'primary-search-account-menu';
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={() => { navigate('/profile'); handleMenuClose(); }}>
-        <AccountCircle sx={{ mr: 1 }} /> My Profile
-      </MenuItem>
-      <Divider />
-      <MenuItem onClick={handleLogout}>
-        <ExitToApp sx={{ mr: 1 }} /> Logout
-      </MenuItem>
-    </Menu>
-  );
-
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={() => { navigate('/'); handleMenuClose(); }}>
-        <Home sx={{ mr: 1 }} /> Home
-      </MenuItem>
-      <MenuItem onClick={() => { navigate('/courses'); handleMenuClose(); }}>
-        <School sx={{ mr: 1 }} /> Courses
-      </MenuItem>
-      {authToken && (
-        <MenuItem onClick={() => { navigate('/adminpanel'); handleMenuClose(); }}>
-          <AdminPanelSettings sx={{ mr: 1 }} /> Admin
-        </MenuItem>
-      )}
-      <MenuItem onClick={() => { navigate('/contact'); handleMenuClose(); }}>
-        <ContactMail sx={{ mr: 1 }} /> Contact
-      </MenuItem>
-      {!authToken ? (
-        <MenuItem onClick={() => { setShowAuthModal(true); handleMenuClose(); }}>
-          <AccountCircle sx={{ mr: 1 }} /> Login / Register
-        </MenuItem>
-      ) : (
-        <MenuItem onClick={handleLogout}>
-          <ExitToApp sx={{ mr: 1 }} /> Logout
-        </MenuItem>
-      )}
-    </Menu>
-  );
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen]);
 
   return (
-    <>
-      <AppBar position="static" sx={{ bgcolor: 'background.paper', color: 'text.primary', boxShadow: 'none', borderBottom: '1px solid', borderColor: 'divider' }}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          {/* Left side - Brand and desktop nav */}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography
-              variant="h6"
-              noWrap
-              component={Link}
-              to="/"
-              sx={{
-                mr: 2,
-                fontWeight: 700,
-                color: 'inherit',
-                textDecoration: 'none',
-                display: 'flex',
-                alignItems: 'center'
-              }}
-            >
-              Zenith
-            </Typography>
+    <NavContainer>
+      <NavContent>
+        <Logo to="/">
+          TechFest
+        </Logo>
 
-            {/* Desktop Navigation - only visible on larger screens */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
-              <Button
-                component={Link}
-                to="/"
-                startIcon={<Home />}
-                sx={{ color: location.pathname === '/' ? 'primary.main' : 'inherit' }}
-              >
-                Home
-              </Button>
-              <Button
-                component={Link}
-                to="/courses"
-                startIcon={<School />}
-                sx={{ color: location.pathname === '/courses' ? 'primary.main' : 'inherit' }}
-              >
-                Courses
-              </Button>
-              {/* {authToken && (
-                <Button
-                  component={Link}
-                  to="/adminpanel"
-                  startIcon={<AdminPanelSettings />}
-                  sx={{ color: location.pathname === '/adminpanel' ? 'primary.main' : 'inherit' }}
-                >
-                  Admin
-                </Button>
-              )} */}
-              <Button
-                component={Link}
-                to="/contact"
-                startIcon={<ContactMail />}
-                sx={{ color: location.pathname === '/contact' ? 'primary.main' : 'inherit' }}
-              >
-                Contact
-              </Button>
-            </Box>
-          </Box>
+        <MobileMenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </MobileMenuButton>
 
-          {/* Right side - Auth and mobile menu */}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {authToken && (
-              <>
-                {/* <IconButton size="large" color="inherit">
-                  <Badge badgeContent={4} color="error">
-                    <Notifications />
-                  </Badge>
-                </IconButton> */}
-                <IconButton
-  size="large"
-  edge="end"
-  aria-label="account of current user"
-  aria-controls={menuId}
-  aria-haspopup="true"
-  onClick={handleProfileMenuOpen}
-  color="inherit"
-  sx={{ ml: 1 }}
->
-  <Avatar
-    alt="User"
-    src="https://img.icons8.com/color/96/user-male-circle--v1.png"
-    sx={{ width: 36, height: 36 }}
-  />
-</IconButton>
-              </>
-            )}
-
-            {!authToken && (
-              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <Button
-                  variant="outlined"
-                  onClick={() => setShowAuthModal(true)}
-                  startIcon={<AccountCircle />}
-                  sx={{ ml: 1 }}
-                >
-                  Login / Register
-                </Button>
-              </Box>
-            )}
-
-            {/* Mobile menu button */}
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-              sx={{ display: { md: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      {renderMobileMenu}
-      {renderMenu}
-      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
-    </>
+        <NavLinks $isOpen={isMenuOpen}>
+          <NavLink 
+            to="/" 
+            $isActive={location.pathname === "/"}
+          >
+            <FaHome /> Home
+          </NavLink>
+          <NavLink 
+            to="/events" 
+            $isActive={location.pathname === "/events"}
+          >
+            <FaCalendarAlt /> Events
+          </NavLink>
+          <NavLink 
+            to="/admin" 
+            $isActive={location.pathname === "/admin"}
+          >
+            <FaUserShield /> Admin
+          </NavLink>
+        </NavLinks>
+      </NavContent>
+    </NavContainer>
   );
 }
 
